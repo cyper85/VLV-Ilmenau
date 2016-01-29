@@ -263,8 +263,6 @@ class ical {
 	
 	public function createNewVLVEvent($start,$end,$id) {
 		$event = new event($start,$end,$id);
-		global $db;
-		global $main;
 		$this->eventData($event,$id);
 		$this->events[] = $event->getEvent();
 	}

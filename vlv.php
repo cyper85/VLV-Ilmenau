@@ -4,13 +4,13 @@
 */
 set_time_limit(300);
 date_default_timezone_set('Europe/Berlin');
-$ids[] = array('id' => 330, 'test' => strtotime('01.10.2015'), 'year' => 2015 ,'ss' => false);
-$ids[] = array('id' => 6, 'test' => strtotime('01.04.2015'), 'year' => 2015 ,'ss' => true);
+$ids[] = array('id' => 330, 'test' => strtotime('01.10.2016'), 'year' => 2016 ,'ss' => false);
+$ids[] = array('id' => 6, 'test' => strtotime('01.04.2016'), 'year' => 2016 ,'ss' => true);
 
 $test = strtotime('01.10.2011');
-$christmasdec = '20141221';
-$christmasjan = '20150105';
-$global_year = 2015;
+$christmasdec = '20151221';
+$christmasjan = '20160105';
+$global_year = 2016;
 $global_ss = false;
 
 require_once('db.php');
@@ -31,6 +31,7 @@ class VLV_Entry {
 	}
 	
 	public function more_entries($array) {
+                $match = $match1 = $match2 = [];
 		if(preg_match('/^\s*(.*?)\s*[:]*\s*$/msi',$array['type'],$match)) {
 			$insert['type'] = $match[1];
 			$insert['location'] = $array['location'];
@@ -60,7 +61,9 @@ class VLV_Entry {
 			$dates = array();
 			if(strtotime($array['period']))
 				$dates[] = strtotime($array['period']);
-			elseif (preg_match('/[UG]\s*\((.*)\)/ms',$array['period'],$match1))
+			elseif (preg_match('/[U]\s*\((.*)\)/ms',$array['period'],$match1))
+				$dates = $this->make_dates($match1[1],-2,$array['wday']);
+			elseif (preg_match('/[G]\s*\((.*)\)/ms',$array['period'],$match1))
 				$dates = $this->make_dates($match1[1],2,$array['wday']);
 			else
 				$dates = $this->make_dates($array['period'],1,$array['wday']);
@@ -110,6 +113,13 @@ class VLV_Entry {
 	private function make_dates($string,$diff,$wday) {
 		global $global_year;
 		global $global_ss;
+                $odd = -1;
+                if($diff === 2)
+                    $odd = 0;
+                elseif($diff === -2) {
+                    $odd = 1;
+                    $diff = 2;
+                }
 		if(preg_match('/Montag/i',$wday))
 			$wday = 1;
 		elseif(preg_match('/Dienstag/i',$wday))
@@ -146,9 +156,15 @@ class VLV_Entry {
 						$j=0;
 						do {
 							if($j==0)
-								$date = $start;
-							else
-								$date = strtotime('+'. $j*$diff*7 .' days',$start);
+                                                            $date = $start;
+							else {
+                                                            $date = strtotime('+'. $j*$diff*7 .' days',$start);
+                                                            if($odd !== -1) {
+                                                                if(date("W",$date)%2 !== $odd)
+                                                                    $date = strtotime('+'. (1+$j*$diff)*7 .' days',$start);
+                                                            }
+                                                        }
+							
 							if((($match[4][$i]>$match[1][$i])&&(date('W',$date) <= $match[4][$i]))||(($match[4][$i]<$match[1][$i])&&((date('W',$date) <= $match[4][$i])||(date('W',$date) >= $match[1][$i]))))
 								$return_array[] = $date;
 							else
