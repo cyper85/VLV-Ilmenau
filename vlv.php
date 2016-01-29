@@ -4,13 +4,13 @@
 */
 set_time_limit(300);
 date_default_timezone_set('Europe/Berlin');
-$ids[] = array('id' => 330, 'test' => strtotime('01.10.2016'), 'year' => 2016 ,'ss' => false);
+$ids[] = array('id' => 330, 'test' => strtotime('01.10.2015'), 'year' => 2015 ,'ss' => false);
 $ids[] = array('id' => 6, 'test' => strtotime('01.04.2016'), 'year' => 2016 ,'ss' => true);
 
 $test = strtotime('01.10.2011');
-$christmasdec = '20151221';
-$christmasjan = '20160105';
-$global_year = 2016;
+$christmasdec = '20141221';
+$christmasjan = '20150105';
+$global_year = 2015;
 $global_ss = false;
 
 require_once('db.php');
