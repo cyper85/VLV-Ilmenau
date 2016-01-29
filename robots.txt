@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /manual/
+
+Sitemap: http://vlv-ilmenau.de/sitemap.xml

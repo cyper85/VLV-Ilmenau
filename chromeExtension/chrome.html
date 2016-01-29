@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Mein Vorlesungsverzeichnis Ilmenau</title>
+		<script>
+		#chrome.browserAction.setBadgeText({text: "back"});
+chrome.runtime.onMessageExternal.addListener(
+  function(request, sender, sendResponse) {
+		sendResponse({farewell: "goodbye"});
+  });
+
+		</script>
+	</head>
+	<body>
+		<p>Test</p>
+	</body>
+</html>

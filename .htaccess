@@ -1,0 +1,4 @@
+AddCharset UTF-8 .ics 
+AddCharset UTF-8 .php
+AddHandler text/calendar .ics
+AddType 'text/calendar; charset=UTF-8' .ics

@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+
+  "name": "Mein Vorlesungsverzeichnis",
+  "description": "Anzeige der nächsten Termine im Vorlesungsverzeichnis.",
+  "version": "1.0.0.1",
+  "permissions": [
+    "https://vlv-ilmenau.de/"
+  ],
+  "externally_connectable": {
+    "matches": ["http://vlv-ilmenau.de/*", "https://vlv-ilmenau.de/*","http://www.vlv-ilmenau.de/*", "https://www.vlv-ilmenau.de/*"]
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+        "matches": ["http://vlv-ilmenau.de/*", "https://vlv-ilmenau.de/*","http://www.vlv-ilmenau.de/*", "https://www.vlv-ilmenau.de/*"],
+        "js": ["jquery-1.11.1.min.js","content.js"]
+    }
+  ],
+  "browser_action": {
+    "default_icon": {
+        "19": "logo19.png",
+        "38": "logo38.png"
+    },
+    "default_title": "Mein Vorlesungsverzeichnis",
+    "default_popup": "chrome.html"
+  }
+}

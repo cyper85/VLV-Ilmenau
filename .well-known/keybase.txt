@@ -1,0 +1,79 @@
+==================================================================
+https://keybase.io/cyper
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://vlv-ilmenau.de
+  * I am cyper (https://keybase.io/cyper) on keybase.
+  * I have a public key with fingerprint 8E03 0F10 431C 3333 8E59  3623 D10A 0316 1195 437D
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "client": {
+            "name": "keybase.io node.js client",
+            "version": "0.7.7"
+        },
+        "key": {
+            "fingerprint": "8e030f10431c33338e593623d10a03161195437d",
+            "host": "keybase.io",
+            "key_id": "D10A03161195437D",
+            "uid": "736770700061bca4cf733517a836e919",
+            "username": "cyper"
+        },
+        "merkle_root": {
+            "ctime": 1424642870,
+            "hash": "be90d311f0f0e1798cd1e35b697e859990555eca45480f8bee8a18c90053514fa3d0630890de2df50226cc5b14017fdcc4b8f7a8a2cf447b280a49c4233bb795",
+            "seqno": 159587
+        },
+        "service": {
+            "hostname": "vlv-ilmenau.de",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1424642989,
+    "expire_in": 157680000,
+    "prev": "5f83929f6c4fbcf396c9e66a03839ee8ee5e58bb694d7df223cb5e7cf41c88db",
+    "seqno": 5,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+owFVUn9sFEUYvSu1tYUmFROQWGtZG9G0nLM7Ozs7xWJLGxGIEbWVasTLzuxsu7C9
+LXvX649L0WKkVoWooYIIGqoCohStwbaJuVrjQdRIIMaAlJKACeBRQ6IIiRXqbK0R
+9q+d+d73vvfeN6/nzQhkBI/lzphzW09VR/D7X2mgJv3k/oREXbNNKktIzLF5JOb/
+RYxGLpVJa3kbNaI8ZLtFEdfkoTXRomlMqRTnXtR2IwIFQjiEpY5SH+43W3aknntN
+nu1zSToHEFgyUKHMoPh0jgjUFGjKwABQ1mSZIBViU1A2uNHYTVOlKc6wbYrbahlU
+3oCvFrXmqQKGGsYAAwA0mTJDZRaGEMnY0KHGiUx8YJR705ZYWxP3fLGN3Fvr8LDn
+ulOOWcz267KqqJqq6BgIOUa0QXRQToAJZdkCFuAyJjozZQ4R1QjmOiKEAIQQF4OR
+qgNLp5zrhqwzAgASMlTLgCbQINAFC1dMCwFF0RhDVFaBjC2TMZXqllBrKMxSVUwV
+HRgqYaoCIaWYIKE/ytdFXCEOEaTjDv/sxW3Gfd1+ZtPW4k58oe008ojRHDK5aGvy
+3JjLXEfUGmKxpjLfdkz4F+cWTsPRT/6lCVM7Yoqd3bhUWUBvjoTopFTirU22x8O2
+j0BY00XowJ/D44ITWTokCrE0plqUWZBojHBNE1sW9yIVzhFHOhXBqSY2LUWBjCKO
+hWuZ6bpJ/zeKhE6jXlBG7fqIEWv2uNTRHdyRGQhmBLJuyfBfbSA3J/+/p/xmYua1
+uW/HT/c9+vLkid4gKvj7UOKnsXUTHyxaPW/2+fOLxypSy+/N654NLpGjqcpr784t
++2OwZeKxbYWmM7b48QPORE5FXe1zAzxzc8Xlj9SRc4FMenr07D0lyarX3ttQcmWP
+c2rfzvG35qzAfYVVRzfUlVzt68vq2TR0cWVlyypeBF9Kuun0rOrSV0p+mZWuu7/h
+ZM9Q8oHf/tzYBcN3L5tMlX9s218N4ppg9sZwzZntmfueqmU/HDyRPnbH+icODGTf
+enzpni8T39idD2/t3vrXJvx1snVRAjqdn306/HzZ7sMPLS/uv5D/aqp05l2x68Pt
+Oclze1/sTiz5cWRJe3Eynz8y/4VLdEcw92rBPOeZs+2D941PvFH93c9sV/XnyfTh
+/vhKZedke23B+vDx8TXX3QULO+/EZ4YbittTzsCWLXm7R46837rZBL9/mJ6k2d9m
+Gfu7dl0ph6OFuL98ftblC8/uLTi4YHSoa0XXsi+KnQdPnupd/c7t21ZdHMlNb3+6
+l8ihobzOI4d6CnKXdv4D
+=1hva
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/cyper
+
+==================================================================
