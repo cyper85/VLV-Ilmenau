@@ -13,7 +13,7 @@ class mainClass {
     }
 
     public function getHeader() {
-        $url = urldecode(str_replace("?_escaped_fragment_=","#!",input_var(INPUT_SERVER,'REQUEST_URI')));
+        $url = urldecode(str_replace("?_escaped_fragment_=","#!",filter_input(INPUT_SERVER,'REQUEST_URI')));
     ?><!DOCTYPE html>
 <html lang='de'>
     <head>
