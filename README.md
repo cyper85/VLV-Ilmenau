@@ -9,8 +9,14 @@ Um den Quellcode lauffähig zu machen, muss noch eine config.php im Root-Verzeic
 
 ``` php
 <?php
+#Amazon
 define('AMAZON_ID','ABC');
 define('SECRET_KEY','DEF');
+
+#GPG
+define('GPG-FINGERPRINT',"fingerprint");
+define('GPG-PASSWORD',"schluesselpasswort");
+
 
 $db = new mysqli('host','user','password','database');
 
