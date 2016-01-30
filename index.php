@@ -8,21 +8,22 @@ $idArray = $main->privateVlv($main->getUid());
 
 $output = "Stelle f&uuml;r deinen individuellen Stundenplan in den <a href='settings.php'>Einstellungen</a> ein, an welchen Veranstaltungen du teilnehmen m&ouml;chtest!";
 if(count($idArray)>0) {
-	$result = $db->query("SELECT `id`, UNIX_TIMESTAMP(`from`) as `from`, UNIX_TIMESTAMP(`to`) as `to` FROM `vlv_entry2date` ".
-			"WHERE `id` IN (".implode(', ',$idArray).") AND `to` > NOW() ORDER BY `from` LIMIT 100");
-	$Termine = array();
-	while($row = $result->fetch_assoc())
-		$Termine[] = $row;
-	$return = array();
-	$return['dates'] = $Termine;
-	$TerminIDsArray = array();
-	foreach($Termine as $Termin)
-		$TerminIDsArray[] = $Termin['id'];
+    $result = $db->query("SELECT `id`, UNIX_TIMESTAMP(`from`) as `from`, UNIX_TIMESTAMP(`to`) as `to` FROM `vlv_entry2date` ".
+                    "WHERE `id` IN (".implode(', ',$idArray).") AND `to` > NOW() ORDER BY `from` LIMIT 100");
+    $Termine = array();
+    while ($row = $result->fetch_assoc()) {
+        $Termine[] = $row;
+    }
+    $return = array();
+    $return['dates'] = $Termine;
+    $TerminIDsArray = array();
+    foreach ($Termine as $Termin) {
+        $TerminIDsArray[] = $Termin['id'];
+    }
 
-	$return['content'] = $main->getVLVdata($TerminIDsArray);
-	
-	$output = $main->vlvSite($return);
-	
+    $return['content'] = $main->getVLVdata($TerminIDsArray);
+
+    $output = $main->vlvSite($return);	
 }
 
 $command = $db->query("SELECT `iCal_string` FROM `user` WHERE `iCal` = 0 AND `uid` = ".$main->getUid());
@@ -32,7 +33,6 @@ if($command->num_rows==1) {
 	$ical = "<a id='vlvICal' href='http://vlv-ilmenau.de/ical.php?id=".urlencode($row['iCal_string'])."' class='fa fa-calendar' style='display: inline-block;'>iCal</a>";
 }
 $main->getHeader();
-
 
 print $ical;
 ?>
@@ -53,75 +53,76 @@ $seminargruppe = "";
 $ical = "";
 
 if(isset($_GET['_escaped_fragment_'])) {
-	$getArray = explode('|',urldecode($_GET['_escaped_fragment_']));
-	$post = array();
-	
-	if(count($getArray)== 3) {
-		$post['type'] = "vlv";
-		$post["Studiengang"] = $getArray[0];
-		$post["Semester"] = $getArray[1];
-		$post["Gruppe"] = $getArray[2];
-		$main->setTitle(implode(' / ',$getArray));
-	}
-	elseif(count($getArray)== 2) {
-		$post['type'] = "vlv";
-		$post["Studiengang"] = $getArray[0];
-		$post["Semester"] = $getArray[1];
-		$main->setTitle(implode(' / ',$getArray));
-	}
-	if(count($post)) {
-		
-		foreach($vlvArray as $sgang => $sem) {
-			$studiengang .= "<option value='{$sgang}'";
-			if($sgang == $post['Studiengang']) {
-				$studiengang .= " selected";
-				foreach($sem as $seme => $gruppen) {
-					$semester .= "<option value='{$seme}'";
-					if($seme == $post['Semester']) {
-						$semester .= " selected";
-						if(count($gruppen)>0) {
-							foreach($gruppen as $gruppe) {
-								$seminargruppe .= "<option value='{$gruppe}'";
-								if($gruppe == $post['Gruppe'])
-									$seminargruppe .= " selected";
-								$seminargruppe .= ">{$gruppe}</option>";
-							}
-						}
-					}
-					$semester .= ">{$seme}</option>";
-				}
-			}
-			$studiengang .= ">{$sgang}</option>";
-			
-		}
-		
-		$ch = curl_init();
+    $getArray = explode('|',urldecode(filter_var(INPUT_GET,'_escaped_fragment_')));
+    $post = array();
 
-		curl_setopt($ch, CURLOPT_URL,"http://vlv-ilmenau.de/ajax.php");
-		curl_setopt($ch, CURLOPT_POST, count($post));
-		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
-		
-		// in real life you should use something like:
-		// curl_setopt($ch, CURLOPT_POSTFIELDS, 
-		//          http_build_query(array('postvar1' => 'value1')));
+    if(count($getArray)== 3) {
+        $post['type'] = "vlv";
+        $post["Studiengang"] = $getArray[0];
+        $post["Semester"] = $getArray[1];
+        $post["Gruppe"] = $getArray[2];
+        $main->setTitle(implode(' / ',$getArray));
+    }
+    elseif(count($getArray)== 2) {
+        $post['type'] = "vlv";
+        $post["Studiengang"] = $getArray[0];
+        $post["Semester"] = $getArray[1];
+        $main->setTitle(implode(' / ',$getArray));
+    }
+    if(count($post)) {
 
-		// receive server response ...
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        foreach($vlvArray as $sgang => $sem) {
+            $studiengang .= "<option value='{$sgang}'";
+            if($sgang == $post['Studiengang']) {
+                $studiengang .= " selected";
+                foreach($sem as $seme => $gruppen) {
+                    $semester .= "<option value='{$seme}'";
+                    if($seme == $post['Semester']) {
+                        $semester .= " selected";
+                        if(count($gruppen)>0) {
+                            foreach($gruppen as $gruppe) {
+                                $seminargruppe .= "<option value='{$gruppe}'";
+                                if ($gruppe == $post['Gruppe']) {
+                                    $seminargruppe .= " selected";
+                                }
+                                $seminargruppe .= ">{$gruppe}</option>";
+                            }
+                        }
+                    }
+                    $semester .= ">{$seme}</option>";
+                }
+            }
+            $studiengang .= ">{$sgang}</option>";
+        }
 
-		$output = $main->vlvSite(json_decode(curl_exec ($ch),1));
-		$http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		curl_close ($ch);
-		if($http_status != "200 OK") {
-			header('HTTP/1.1 410 Gone');
-			if(isset($_SERVER['HTTPS']))
-				header('Location: https://vlv-ilmenau.de/');
-			else
-				header('Location: http://vlv-ilmenau.de/');
-			die();
-		}
-		unset($post['type']);
-		$ical = "?".htmlentities(http_build_query($post));
-	}
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL,"http://vlv-ilmenau.de/ajax.php");
+        curl_setopt($ch, CURLOPT_POST, count($post));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+
+        // in real life you should use something like:
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, 
+        //          http_build_query(array('postvar1' => 'value1')));
+
+        // receive server response ...
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $output = $main->vlvSite(json_decode(curl_exec ($ch),1));
+        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close ($ch);
+        if($http_status != "200 OK") {
+                header('HTTP/1.1 410 Gone');
+                if (isset($_SERVER['HTTPS'])) {
+                    header('Location: https://vlv-ilmenau.de/');
+                } else {
+                    header('Location: http://vlv-ilmenau.de/');
+                }
+                die();
+        }
+        unset($post['type']);
+        $ical = "?".htmlentities(http_build_query($post));
+    }
 }
 
 $main->getDateFkt();
@@ -134,10 +135,10 @@ $main->getHeader();
 <select id='studiengang'>
 <?php print $studiengang; ?>
 </select>
-<select id='semester'<?php if(strlen($semester)==0) echo" class='hidden'"; ?>>
+    <select id='semester'<?php    if (strlen($semester) === 0) { echo" class='hidden'"; } ?>>
 <?php print $semester; ?>
 </select>
-<select id='gruppe'<?php if(strlen($seminargruppe)==0) echo" class='hidden'"; ?>>
+<select id='gruppe'<?php if(strlen($seminargruppe)===0) { echo" class='hidden'"; } ?>>
 <?php print $seminargruppe; ?>
 </select>
 <a id='vlvICal' href='http://vlv-ilmenau.de/ical.php<?php echo $ical; ?>' class="fa fa-calendar">iCal</a>
@@ -291,7 +292,7 @@ $main->getHeader();
 				}
 			}
 		});
-	}
+	};
 	
 	$(function() {
 		$("select#studiengang").change(generate_semester);
@@ -300,11 +301,11 @@ $main->getHeader();
 		generate_sgang();
 		if((window.location.hash.length>0)||(window.location.search.substring(1).match(/^_escaped_fragment_=/))) {
 			var newHash = unescape(window.location.hash.replace(/^#!/,'')).split('|');
-			if(newHash.length==1) {
+			if(newHash.length===1) {
 				newHash = unescape(unescape(window.location.search.substring(1).replace(/^_escaped_fragment_=/,''))).split('|');
 				window.location.hash = unescape(unescape(window.location.search.substring(1).replace(/^_escaped_fragment_=/,'')));
 			}
-			if(newHash.length==1) {
+			if(newHash.length===1) {
 				newHash = getCookie('hash').split('|');
 				window.location.hash = getCookie('hash');
 			}
@@ -316,9 +317,9 @@ $main->getHeader();
 			setCookie('hash',window.location.hash.replace(/^#!/,''),100);
 			
 			$("select#studiengang").val(newHash[0]).change();
-			if(typeof newHash[1] != "undefined") {
+			if(typeof newHash[1] !== "undefined") {
 				$("select#semester").val(newHash[1]).change();
-				if(typeof newHash[2] != "undefined") {
+				if(typeof newHash[2] !== "undefined") {
 					$("select#gruppe").val(newHash[2]).change();
 				}
 			}
@@ -338,4 +339,3 @@ $main->getHeader();
 <?php 
 endif;
 $main->getFooter();
-?>

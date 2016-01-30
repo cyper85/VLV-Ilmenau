@@ -1,7 +1,7 @@
 <?php
 
 
-if(!isset($_GET['id']) AND !isset($_GET['vid'])) {
+if(!\filter_has_var(INPUT_GET,'id') AND !\filter_has_var(INPUT_GET,'vid')) {
 	header('Content-type: application/json');
 	exit;
 }
@@ -10,9 +10,9 @@ $vlvIds = array();
 ?>
 <div>
 <?php
-if(isset($_GET['id'])) {
+if(\filter_has_var(INPUT_GET,'id')) {
 $command = $db->query("SELECT `Titel`,`Fachgebiet`,`Fachverantwortlicher`,`lang`,`LP`,`exam`,`Vorkenntnisse`,`Lernergebnisse`,`Inhalt` ".
-		"FROM `vlv2_object` WHERE `id` = '".((int) $_GET['id'])."'");
+		"FROM `vlv2_object` WHERE `id` = '".((int) \filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT))."'");
 
 $vlvEntry = $command->fetch_assoc();
 
@@ -55,7 +55,7 @@ $main->getHeader();
 <!--Literaturempfehlungen-->
 <!--weitere Fächer-->
 <?php
-$command = $db->query("SELECT `Titel`,`id` FROM `vlv2_object` WHERE `Fachgebiet` = ".((int) $vlvEntry['Fachgebiet'])." AND `id` != ".((int) $_GET['id'])." ORDER BY `Titel`");
+$command = $db->query("SELECT `Titel`,`id` FROM `vlv2_object` WHERE `Fachgebiet` = ".((int) $vlvEntry['Fachgebiet'])." AND `id` != ".((int) \filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT))." ORDER BY `Titel`");
 $vlvOther = array();
 while($row = $command->fetch_assoc())
 	$vlvOther[] = $row;
@@ -74,14 +74,14 @@ foreach ($vlvOther as $other) {
 <?php
 }
 
-$command = $db->query("SELECT DISTINCT `vlv_id` FROM `vlv_zusammenfassung` WHERE `description` = '".((int) $_GET['id'])."'");
+$command = $db->query("SELECT DISTINCT `vlv_id` FROM `vlv_zusammenfassung` WHERE `description` = '".((int) \filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT))."'");
 if($command->num_rows>0)
 	while($row = $command->fetch_assoc())
 		$vlvIds[] = "'".$db->real_escape_string($row['vlv_id'])."'";
 
 }
 elseif(isset($_GET['vid'])) {
-$command = $db->query("SELECT `title`,`author`,`url` FROM `vlv_zusammenfassung` WHERE `vlv_id` = '".$db->real_escape_string($_GET['vid'])."'");
+$command = $db->query("SELECT `title`,`author`,`url` FROM `vlv_zusammenfassung` WHERE `vlv_id` = '".$db->real_escape_string(\filter_input(INPUT_GET,'vid'))."'");
 
 $vlvEntry = $command->fetch_assoc();
 
@@ -103,7 +103,7 @@ $main->getHeader();
 	<span id='vlvVerantwortlich' class='vlvObject'><a href='<?= htmlentities(html_entity_decode($vlvEntry['url'])); ?>'><?= htmlentities(html_entity_decode($vlvEntry['url'])); ?></a></span>
 </div>
 <?php
-$vlvIds[] = "'".$db->real_escape_string($_GET['vid'])."'";
+$vlvIds[] = "'".$db->real_escape_string(\filter_input(INPUT_GET,'vid'))."'";
 }
 
 if(count($vlvIds>0)) {

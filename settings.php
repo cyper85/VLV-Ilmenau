@@ -73,7 +73,7 @@ $main->getHeader();
 			for(var Studis in data['date'][type]) {
 				var buttonColor = "red";
 				var buttonCallback = chooseEvent;
-				if(vlvOwns && vlvOwns[vlv] && (((typeof vlvOwns[vlv][type] == "undefined") && (vlvOwns[vlv]['root'] == Studis)) || (vlvOwns[vlv][type] && (vlvOwns[vlv][type] == Studis)))) {
+				if(vlvOwns && vlvOwns[vlv] && (((typeof vlvOwns[vlv][type] === "undefined") && (vlvOwns[vlv]['root'] === Studis)) || (vlvOwns[vlv][type] && (vlvOwns[vlv][type] === Studis)))) {
 					buttonColor = "green";
 					buttonCallback = unChooseEvent;
 				}
@@ -95,7 +95,7 @@ $main->getHeader();
 			$(".vlvVeranstaltung fieldset button.green").addClass('red').unbind("click").click(chooseEvent).removeClass('green');
 			for(vlv in vlvOwns) {
 				$('.id-'+vlv+' button.fa-square-o').addClass('fa-check-square-o').addClass('green').unbind("click").click(unChooseEvent).removeClass('fa-square-o').removeClass('red');
-				if(typeof vlvOwns[vlv]['root'] != "undefined") {
+				if(typeof vlvOwns[vlv]['root'] !== "undefined") {
 					$(".id_"+vlv+".group_"+vlvOwns[vlv]['root'].replace(classRegExp,"_")).addClass('green').unbind("click").click(unChooseEvent).removeClass('red');
 					delete vlvOwns[vlv]['root'];
 				}
@@ -105,7 +105,7 @@ $main->getHeader();
 				}
 			}
 		});
-	}
+	};
 	var chooseEvent = function() {
 		var ajaxPost = {};
 		ajaxPost.type = 'chooseEvent';
@@ -122,7 +122,7 @@ $main->getHeader();
 		$.post('ajax.php',ajaxPost,function(data,status) {
 			createVlvOwns();
 		});
-	}
+	};
 	var unChooseEvent = function() {
 		var ajaxPost = {};
 		ajaxPost.type = 'unChooseEvent';
@@ -140,15 +140,15 @@ $main->getHeader();
 			console.log(data);
 			createVlvOwns();
 		});
-	}
+	};
 	var fieldsetDown = function() {
 		$(this).parent().parent().children('fieldset').slideDown();
 		$(this).removeClass("fa-chevron-circle-down").addClass("fa-chevron-circle-up").unbind("click").click(fieldsetUp);
-	}
+	};
 	var fieldsetUp = function() {
 		$(this).parent().parent().children('fieldset').slideUp();
 		$(this).removeClass("fa-chevron-circle-up").addClass("fa-chevron-circle-down").unbind("click").click(fieldsetDown);
-	}
+	};
 	var generate_sgang = function() {
 		$("a#vlvICal").hide();
 		$("select#semester").hide();
@@ -199,7 +199,7 @@ $main->getHeader();
 		
 		// VLV neu laden
 		$.post('ajax.php',ajaxPost,function(data,status) {
-			if(typeof data != "undefined") {
+			if(typeof data !== "undefined") {
 				var sgang = $("select#studiengang").val();
 				var semester = $("select#semester").val();
 				var group = $("select#gruppe").val();
@@ -210,7 +210,7 @@ $main->getHeader();
 				}
 			}
 		});
-	}
+	};
 	$(function() {
 	
 		createVlvOwns();
@@ -227,22 +227,22 @@ $main->getHeader();
 		generate_sgang();
 		if(window.location.hash.length>0) {
 			var newHash = window.location.hash.replace(/^#!/,'').split("|");
-			if(newHash.length==1) {
+			if(newHash.length===1) {
 				newHash = unescape(unescape(window.location.search.substring(1).replace(/^_escaped_fragment_=/,''))).split('|');
 				window.location.hash = unescape(unescape(window.location.search.substring(1).replace(/^_escaped_fragment_=/,'')));
 			}
-			if(newHash.length==1) {
+			if(newHash.length===1) {
 				newHash = getCookie('hash').split('|');
 				window.location.hash = getCookie('hash');
 			}
-			if(newHash.length==1) {
+			if(newHash.length===1) {
 				newHash = "";
 			}
 			setCookie('hash',window.location.hash.replace(/^#!/,''),100);
 			$("select#studiengang").val(newHash[0]).change();
-			if(typeof newHash[1] != "undefined") {
+			if(typeof newHash[1] !== "undefined") {
 				$("select#semester").val(newHash[1]).change();
-				if(typeof newHash[2] != "undefined") {
+				if(typeof newHash[2] !== "undefined") {
 					$("select#gruppe").val(newHash[2]).change();
 				}
 			}
