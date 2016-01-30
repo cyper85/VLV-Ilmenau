@@ -36,8 +36,13 @@
 <p>Um den Quellcode lauffähig zu machen, muss noch eine config.php im Root-Verzeichnis angelegt werden mit folgendem Inhalt:</p>
 
 <div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">#Amazon</span></span>
 <span class="pl-s1"><span class="pl-c1">define</span>(<span class="pl-s"><span class="pl-pds">'</span>AMAZON_ID<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>ABC<span class="pl-pds">'</span></span>);</span>
 <span class="pl-s1"><span class="pl-c1">define</span>(<span class="pl-s"><span class="pl-pds">'</span>SECRET_KEY<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>DEF<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">#GPG</span></span>
+<span class="pl-s1"><span class="pl-c1">define</span>(<span class="pl-s"><span class="pl-pds">'</span>GPG-FINGERPRINT<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">"</span>fingerprint<span class="pl-pds">"</span></span>);</span>
+<span class="pl-s1"><span class="pl-c1">define</span>(<span class="pl-s"><span class="pl-pds">'</span>GPG-PASSWORD<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">"</span>schluesselpasswort<span class="pl-pds">"</span></span>);</span>
 <span class="pl-s1"></span>
 <span class="pl-s1"><span class="pl-smi">$db</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">mysqli</span>(<span class="pl-s"><span class="pl-pds">'</span>host<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>user<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>password<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>database<span class="pl-pds">'</span></span>);</span>
 <span class="pl-s1"></span>
