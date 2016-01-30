@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>VLV-Ilmenau by cyper85</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>VLV-Ilmenau</h1>
+        <h2>Alternative Ansicht des Vorlesungsverzeichnisses der TU Ilmenau</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/cyper85/VLV-Ilmenau/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/cyper85/VLV-Ilmenau/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/cyper85/VLV-Ilmenau" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <p>Quellcode für <a href="https://vlv-ilmenau.de">https://vlv-ilmenau.de</a> ohne die <em>config.php</em></p>
+
+<h3>
+<a id="configphp" class="anchor" href="#configphp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config.php</h3>
+
+<p>Um den Quellcode lauffähig zu machen, muss noch eine config.php im Root-Verzeichnis angelegt werden mit folgendem Inhalt:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c1">define</span>(<span class="pl-s"><span class="pl-pds">'</span>AMAZON_ID<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>ABC<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"><span class="pl-c1">define</span>(<span class="pl-s"><span class="pl-pds">'</span>SECRET_KEY<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>DEF<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$db</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">mysqli</span>(<span class="pl-s"><span class="pl-pds">'</span>host<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>user<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>password<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>database<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c1">session_start</span>();</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">require_once</span>(<span class="pl-s"><span class="pl-pds">"</span>mainClass.php<span class="pl-pds">"</span></span>);</span>
+<span class="pl-s1"><span class="pl-smi">$main</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">mainClass</span>();</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">function</span> <span class="pl-en">singular</span>(<span class="pl-smi">$text</span>) {</span>
+<span class="pl-s1">        <span class="pl-smi">$text</span> <span class="pl-k">=</span> <span class="pl-c1">str_replace</span>(<span class="pl-s"><span class="pl-pds">"</span>Vorlesungen<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>Vorlesung<span class="pl-pds">"</span></span>,<span class="pl-smi">$text</span>);</span>
+<span class="pl-s1">        <span class="pl-smi">$text</span> <span class="pl-k">=</span> <span class="pl-c1">str_replace</span>(<span class="pl-s"><span class="pl-pds">"</span>Seminare<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>Seminar<span class="pl-pds">"</span></span>,<span class="pl-smi">$text</span>);</span>
+<span class="pl-s1">        <span class="pl-smi">$text</span> <span class="pl-k">=</span> <span class="pl-c1">str_replace</span>(<span class="pl-s"><span class="pl-pds">"</span>Hauptseminare<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>Hauptseminar<span class="pl-pds">"</span></span>,<span class="pl-smi">$text</span>);</span>
+<span class="pl-s1">        <span class="pl-smi">$text</span> <span class="pl-k">=</span> <span class="pl-c1">str_replace</span>(<span class="pl-s"><span class="pl-pds">"</span>Übungen<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>Übung<span class="pl-pds">"</span></span>,<span class="pl-smi">$text</span>);</span>
+<span class="pl-s1">        <span class="pl-smi">$text</span> <span class="pl-k">=</span> <span class="pl-c1">str_replace</span>(<span class="pl-s"><span class="pl-pds">"</span>Praktika<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>Praktikum<span class="pl-pds">"</span></span>,<span class="pl-smi">$text</span>);</span>
+<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-smi">$text</span>;</span>
+<span class="pl-s1">}</span>
+<span class="pl-s1"></span><span class="pl-pse"><span class="pl-s1">?</span>&gt;</span></pre></div>
+      </section>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-73059876-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
