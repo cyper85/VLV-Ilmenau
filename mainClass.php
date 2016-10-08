@@ -474,10 +474,10 @@ class mainClass {
         if ($command->num_rows > 0) {
             while ($ruleRow = $command->fetch_assoc()) {
                 if (isset($vlvIdTypeArray[$ruleRow['vlv_id']])) {
-                    $vlvIdTypeArray[$ruleRow['vlv_id']][] = $ruleRow['vlv_id']['type'];
+                    $vlvIdTypeArray[$ruleRow['vlv_id']][] = $ruleRow['type'];
                     $vlvIdTypeArray[$ruleRow['vlv_id']] = array_unique($vlvIdTypeArray[$ruleRow['vlv_id']]);
                 } else {
-                    $vlvIdTypeArray[$ruleRow['vlv_id']] = array($ruleRow['vlv_id']['type']);
+                    $vlvIdTypeArray[$ruleRow['vlv_id']] = array($ruleRow['type']);
                 }
                 $vlvCommand = $this->db->query("SELECT `id` FROM `vlv_entry` WHERE `vlv_id` = '" . $this->db->real_escape_string($ruleRow['vlv_id']) . "' AND `type` = '" . $this->db->real_escape_string($ruleRow['type']) . "'");
                 if ($vlvCommand->num_rows > 0) {
