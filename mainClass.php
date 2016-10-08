@@ -379,8 +379,10 @@ class mainClass {
             array ( 'host' => SMTP_HOST,
                     'auth' => SMTP_AUTH,
                     'username' => SMTP_USER,
-                    'password' => SMTP_PASS));
+                    'password' => SMTP_PASS,
+                    'localhost' => SMTP_URL));
         $mail = $smtp->send($to, $header, $message);
+        
     }
 
     public function vlvSite($json) {
