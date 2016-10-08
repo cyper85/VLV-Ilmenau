@@ -363,19 +363,24 @@ class mainClass {
     }
 
     public function sendMail ($to, $subject, $message) {
-        $header = "Precedence: bulk\r\n";
-        $header .= "From: Mein Vorlesungsverzeichnis Ilmenau <webmaster@vlv-ilmenau.de>\r\n";
-        $header .= "Reply-To: webmaster@vlv-ilmenau.de\r\n";
-        $header .= "X-Mailer: PHP/" . phpversion()."\r\n";
-        $header .= "Content-Type: text/html; charset=UTF-8\r\n";
+        require_once 'Mail.php';
+        $header["Precedence"] = "bulk";
+        $header["From"] = "Mein Vorlesungsverzeichnis Ilmenau <webmaster@vlv-ilmenau.de>";
+        $header["Reply-To"] = "webmaster@vlv-ilmenau.de";
+        $header["X-Mailer"] = "PHP/" . phpversion();
+        $header["Content-Type"] = "text/html; charset=UTF-8";
+        $header["From"] = "webmaster@vlv-ilmenau.de";
+        $header["To"] = $to;
+        $header["Subject"] = $subject;
 
         $message .= "\n\n-- \nhttp://vlv-ilmenau.de\n";
-        putenv('GNUPGHOME=/var/www/.gnupg');
-        $gpg = new gnupg();
-        $gpg->addsignkey(GPG-FINGERPRINT,GPG-PASSWORD);
-        $signed = $gpg->sign($message);
-
-        mail(strtolower($to),$subject,$signed,$header,'-fwebmaster@vlv-ilmenau.de');
+        
+        $smtp = Mail::factory('smtp',
+            array ( 'host' => SMTP_HOST,
+                    'auth' => SMTP_AUTH,
+                    'username' => SMTP_USER,
+                    'password' => SMTP_PASS));
+        $mail = $smtp->send($to, $header, $message);
     }
 
     public function vlvSite($json) {
