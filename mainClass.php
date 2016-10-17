@@ -396,6 +396,7 @@ class mainClass {
         require 'libs/PHPMailerAutoload.php';
         
         $mail = new PHPMailer;
+        $mail->CharSet = 'UTF-8';
         $mail->isSMTP(); 
         $mail->Host = SMTP_HOST;
         $mail->Hostname = SMTP_URL;
