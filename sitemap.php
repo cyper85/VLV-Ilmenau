@@ -69,17 +69,23 @@ echo "<?xml version='1.0' encoding='UTF-8' ?>\n";
     $command = $db->query("SELECT DISTINCT `description` FROM `vlv_zusammenfassung` WHERE `description` IS NOT NULL AND `description` != ''");
 
     while ($row = $command->fetch_assoc()) {
-        $lastModCommand = $db->query("SELECT MAX(`last_change`) as `last_change` FROM `vlv_entry` WHERE `vlv_id` IN (SELECT DISTINCT `vlv_id` FROM `vlv_zusammenfassung` WHERE `description`='" . ((int) $row['description']) . "')");
-        $lastMod = $lastModCommand->fetch_assoc();
-        print "\n\t<url>\n\t\t<lastmod>{$lastMod['last_change']}</lastmod>\n\t\t<loc>https://vlv-ilmenau.de/vlvData.php?id=" . ((int) $row['description']) . "</loc>\n\t\t<changefreq>monthly</changefreq>\n\t\t<priority>0.1</priority>\n\t</url>";
+        $lastModCommand = $db->query("SELECT MAX(`last_change`) as `last_change` FROM `vlv_entry` WHERE `vlv_id` IN (SELECT DISTINCT `vlv_id` FROM `vlv_zusammenfassung` WHERE `description`='" . ((int) $row['description']) . "') AND `vlv_entry`.`last_change` <= DATE_FORMAT(NOW(),'%Y-%m-%d')");
+        if(($lastMod = $lastModCommand->fetch_assoc())AND(  strlen($lastMod['last_change'])>0)) {
+            print "\n\t<url>\n\t\t<lastmod>{$lastMod['last_change']}</lastmod>\n\t\t<loc>https://vlv-ilmenau.de/vlvData.php?id=" . ((int) $row['description']) . "</loc>\n\t\t<changefreq>monthly</changefreq>\n\t\t<priority>0.1</priority>\n\t</url>";
+        } else {
+            print "\n\t<url>\n\t\t<loc>https://vlv-ilmenau.de/vlvData.php?id=" . ((int) $row['description']) . "</loc>\n\t\t<changefreq>monthly</changefreq>\n\t\t<priority>0.1</priority>\n\t</url>";
+        }
     }
 
     $command = $db->query("SELECT DISTINCT `vlv_id` FROM `vlv_zusammenfassung` WHERE `description` IS NULL OR `description` = ''");
 
     while ($row = $command->fetch_assoc()) {
-        $lastModCommand = $db->query("SELECT MAX(`last_change`) as `last_change` FROM `vlv_entry` WHERE `vlv_id` = '" . $db->real_escape_string($row['vlv_id']) . "'");
-        $lastMod = $lastModCommand->fetch_assoc();
-        print "\n\t<url>\n\t\t<lastmod>{$lastMod['last_change']}</lastmod>\n\t\t<loc>https://vlv-ilmenau.de/vlvData.php?vid=" . urlencode($row['vlv_id']) . "</loc>\n\t\t<changefreq>monthly</changefreq>\n\t\t<priority>0.1</priority>\n\t</url>";
+        $lastModCommand = $db->query("SELECT MAX(`last_change`) as `last_change` FROM `vlv_entry` WHERE `vlv_id` = '" . $db->real_escape_string($row['vlv_id']) . "' AND `vlv_entry`.`last_change` <= DATE_FORMAT(NOW(),'%Y-%m-%d')");
+        if(($lastMod = $lastModCommand->fetch_assoc())AND(  strlen($lastMod['last_change'])>0)) {
+            print "\n\t<url>\n\t\t<lastmod>{$lastMod['last_change']}</lastmod>\n\t\t<loc>https://vlv-ilmenau.de/vlvData.php?vid=" . urlencode($row['vlv_id']) . "</loc>\n\t\t<changefreq>monthly</changefreq>\n\t\t<priority>0.1</priority>\n\t</url>";
+        } else {
+            print "\n\t<url>\n\t\t<loc>https://vlv-ilmenau.de/vlvData.php?vid=" . urlencode($row['vlv_id']) . "</loc>\n\t\t<changefreq>monthly</changefreq>\n\t\t<priority>0.1</priority>\n\t</url>";
+        }
     }
     ?>
 </urlset>
