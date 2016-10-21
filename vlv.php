@@ -5,15 +5,16 @@
  */
 set_time_limit(300);
 date_default_timezone_set('Europe/Berlin');
-$ids[] = array('id' => 330, 'test' => strtotime('01.10.2015'), 'year' => 2015, 'ss' => false);
+$ids[] = array('id' => 330, 'test' => strtotime('01.10.2016'), 'year' => 2016, 'ss' => false);
 $ids[] = array('id' => 6, 'test' => strtotime('01.04.2016'), 'year' => 2016, 'ss' => true);
 
 $test = strtotime('01.10.2011');
-$christmasdec = '20141221';
-$christmasjan = '20150105';
-$global_year = 2015;
+$christmasdec = '20161224';
+$christmasjan = '20170108';
+$global_year = 2016;
 $global_ss = false;
 
+require_once("config.php");
 require_once('db.php');
 
 class VLV_Entry {
@@ -203,7 +204,7 @@ class VLV_Entry {
 }
 
 function VLV($id) {
-    global $db;
+    global $db2;
     $url = "http://www.tu-ilmenau.de/vlv/index.php?id=" . $id;
     //Eintagsarray
     $entries = array();
@@ -277,7 +278,7 @@ function VLV($id) {
             }
             $objectId = $pageMatch2['id'];
             // Erzeuge Eintrag
-            $db->insert('vlv2_object_tmp', $pageMatch2);
+            $db2->insert('vlv2_object_tmp', $pageMatch2);
 
             //Literatur
             preg_match('/<th>\s*Literatur\s*<\/th>\s*<td>(.*?)<\/td>/s', $file, $pageMatch['Literatur']);
@@ -286,19 +287,19 @@ function VLV($id) {
             foreach ($liste as $l) {
                 if (strlen(trim($l)) > 0) {
                     if (strlen(trim($l)) < 255) {
-                        $db->insert('vlv_literatur_tmp', array('vlv_id' => $pageMatch2['id'], "literatur_ref" => trim($l)));
+                        $db2->insert('vlv_literatur_tmp', array('vlv_id' => $pageMatch2['id'], "literatur_ref" => trim($l)));
                     } else {
                         $lArray = preg_split("/(ISBN[^a-z]+)/i", trim($l), -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
                         if (count($lArray) > 1) {
                             for ($i = 0; $i < count($lArray); $i = $i + 2) {
                                 if (isset($lArray[$i + 1])) {
-                                    $db->insert('vlv_literatur_tmp', array('vlv_id' => $pageMatch2['id'], "literatur_ref" => $lArray[$i] . " " . $lArray[$i + 1]));
+                                    $db2->insert('vlv_literatur_tmp', array('vlv_id' => $pageMatch2['id'], "literatur_ref" => $lArray[$i] . " " . $lArray[$i + 1]));
                                 } else {
-                                    $db->insert('vlv_literatur_tmp', array('vlv_id' => $pageMatch2['id'], "literatur_ref" => $lArray[$i]));
+                                    $db2->insert('vlv_literatur_tmp', array('vlv_id' => $pageMatch2['id'], "literatur_ref" => $lArray[$i]));
                                 }
                             }
                         } else {
-                            $db->insert('vlv_literatur_tmp', array('vlv_id' => $pageMatch2['id'], "literatur_ref" => trim($l)));
+                            $db2->insert('vlv_literatur_tmp', array('vlv_id' => $pageMatch2['id'], "literatur_ref" => trim($l)));
                         }
                     }
                 }
@@ -351,7 +352,7 @@ function VLV($id) {
                 #print $match[3][$i]."\n";
                 if ((preg_match('/\d+\.\d+\.\d+/ms', $match[3][$i])) || (preg_match('/KW/ms', $match[3][$i]))) {
                     if (!isset($object)) {
-                        $object = new VLV_Entry($match2[1], $match1[1], $match1[2], $db, $entry, $objectId, $match[8][$i]);
+                        $object = new VLV_Entry($match2[1], $match1[1], $match1[2], $db2, $entry, $objectId, $match[8][$i]);
                     }
                     if (!preg_match('/^\s*&nbsp;\s*$/msi', $match[1][$i])) {
                         $last = $match[1][$i];
@@ -378,13 +379,13 @@ function VLV($id) {
     }
 }
 
-$db = new db('localhost', 'studical', 'studical', 'studical');
-$db->create_tmp_table("vlv_entry_tmp", "vlv_entry");
-$db->create_tmp_table("vlv_entry2stud_tmp", "vlv_entry2stud");
-$db->create_tmp_table("vlv_entry2date_tmp", "vlv_entry2date");
-$db->create_tmp_table("vlv_zusammenfassung_tmp", "vlv_zusammenfassung");
-$db->create_tmp_table("vlv_literatur_tmp", "vlv_literatur");
-$db->create_tmp_table("vlv2_object_tmp", "vlv2_object");
+$db2 = new db($db);
+$db2->create_tmp_table("vlv_entry_tmp", "vlv_entry");
+$db2->create_tmp_table("vlv_entry2stud_tmp", "vlv_entry2stud");
+$db2->create_tmp_table("vlv_entry2date_tmp", "vlv_entry2date");
+$db2->create_tmp_table("vlv_zusammenfassung_tmp", "vlv_zusammenfassung");
+$db2->create_tmp_table("vlv_literatur_tmp", "vlv_literatur");
+$db2->create_tmp_table("vlv2_object_tmp", "vlv2_object");
 
 // Startseite auslesen
 
@@ -398,10 +399,10 @@ foreach ($ids as $id) {
     print "end: " . $id['id'] . " (Dauer: " . (time() - $start) . "sec)\n";
 }
 
-$db->copy_table("vlv_zusammenfassung", "vlv_zusammenfassung_tmp");
-$db->copy_table("vlv_entry2date", "vlv_entry2date_tmp");
-$db->copy_table("vlv_entry2stud", "vlv_entry2stud_tmp");
-$db->copy_table("vlv_entry", "vlv_entry_tmp");
-$db->copy_table("vlv_literatur", "vlv_literatur_tmp");
-$db->copy_table("vlv2_object", "vlv2_object_tmp");
-$db->query("INSERT INTO `sysvar` (`key`,`value`) VALUES ('lastupdate','" . time() . "') ON DUPLICATE KEY UPDATE `value` = '" . time() . "'");
+$db2->copy_table("vlv_zusammenfassung", "vlv_zusammenfassung_tmp");
+$db2->copy_table("vlv_entry2date", "vlv_entry2date_tmp");
+$db2->copy_table("vlv_entry2stud", "vlv_entry2stud_tmp");
+$db2->copy_table("vlv_entry", "vlv_entry_tmp");
+$db2->copy_table("vlv_literatur", "vlv_literatur_tmp");
+$db2->copy_table("vlv2_object", "vlv2_object_tmp");
+$db2->query("INSERT INTO `sysvar` (`key`,`value`) VALUES ('lastupdate','" . time() . "') ON DUPLICATE KEY UPDATE `value` = '" . time() . "'");

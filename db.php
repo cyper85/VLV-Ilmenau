@@ -7,11 +7,11 @@
  */
 
 
-class db {
+class db{
     private $db = false;
 
-    function __construct($db_host, $db_user, $db_pass, $db_db) {
-        $this->db = mysqli_connect($db_host, $db_user, $db_pass,$db_db);
+    function __construct($mysql) {
+        $this->db = $mysql;
         $this->db->set_charset('utf-8');
     }
 

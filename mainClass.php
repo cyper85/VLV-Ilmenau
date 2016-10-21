@@ -393,24 +393,33 @@ class mainClass {
     }
 
     public function sendMail($to, $subject, $message) {
-        require_once 'Mail.php';
-        $header["Precedence"] = "bulk";
-        $header["From"] = "Mein Vorlesungsverzeichnis Ilmenau <webmaster@vlv-ilmenau.de>";
-        $header["Reply-To"] = "webmaster@vlv-ilmenau.de";
-        $header["X-Mailer"] = "PHP/" . phpversion();
-        $header["Content-Type"] = "text/html; charset=UTF-8";
-        $header["From"] = "webmaster@vlv-ilmenau.de";
-        $header["To"] = $to;
-        $header["Subject"] = $subject;
+        require 'libs/PHPMailerAutoload.php';
+        
+        $mail = new PHPMailer;
+        $mail->CharSet = 'UTF-8';
+        $mail->isSMTP(); 
+        $mail->Host = SMTP_HOST;
+        $mail->Hostname = SMTP_URL;
+        $mail->Username = SMTP_USER;
+        $mail->Password = SMTP_PASS;
+        $mail->SMTPSecure = SMTP_SECURE;
+        $mail->Port = SMTP_PORT;                                    // TCP port to connect to
+        $mail->isHTML(false);
+        $mail->Body    = $message."\n\n-- \nhttps://vlv-ilmenau.de\n";
+        $mail->Subject = $subject;
+        #$mail->SMTPDebug = 1;
+        $mail->setFrom(SMTP_USER, 'Mein Vorlesungsverzeichnis Ilmenau');
+        $mail->addReplyTo('webmaster@vlv-ilmenau.de', 'Webmaster');
+        $mail->addAddress($to);
 
-        $message .= "\n\n-- \nhttp://vlv-ilmenau.de\n";
+        $mail->sign(
+            SMTP_SIGN_CERT,
+            SMTP_SIGN_KEY,
+            SMTP_SIGN_KEY_PASS,
+            SMTP_SIGN_CHAIN
+        );
 
-        $smtp = Mail::factory('smtp', array('host' => SMTP_HOST,
-                    'auth' => SMTP_AUTH,
-                    'username' => SMTP_USER,
-                    'password' => SMTP_PASS,
-                    'localhost' => SMTP_URL));
-        $mail = $smtp->send($to, $header, $message);
+        $mail->send();
     }
 
     public function vlvSite($json) {
