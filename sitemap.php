@@ -44,8 +44,8 @@ echo "<?xml version='1.0' encoding='UTF-8' ?>\n";
             if (count($groups) > 0) {
                 foreach ($groups as $g) {
                     // Last-Change herausfinden
-                    $result = $db->query("SELECT MAX(`vlv_entry`.`last_change`) AS `last_change` FROM `vlv_entry` INNER JOIN `vlv_entry2stud` ON `vlv_entry`.`id` = `vlv_entry2stud`.`id` WHERE `vlv_entry2stud`.`studiengang` = '".$sgang."' AND `vlv_entry2stud`.`seminargruppe` = '".$g."' AND `vlv_entry2stud`.`semester` = '".$g."' AND `vlv_entry`.`last_change` <= DATE_FORMAT(NOW(),'%Y-%m-%d') AND `vlv_entry`.`last_change` != '' AND `vlv_entry`.`last_change` IS NOT NULL;");
-                    if($row = $result->fetch_assoc()) {
+                    $result = $db->query("SELECT MAX(`vlv_entry`.`last_change`) AS `last_change` FROM `vlv_entry` INNER JOIN `vlv_entry2stud` ON `vlv_entry`.`id` = `vlv_entry2stud`.`id` WHERE `vlv_entry2stud`.`studiengang` = '".$sgang."' AND `vlv_entry2stud`.`seminargruppe` = '".$g."' AND `vlv_entry2stud`.`semester` = '".$g."' AND `vlv_entry`.`last_change` <= DATE_FORMAT(NOW(),'%Y-%m-%d');");
+                    if(($row = $result->fetch_assoc()) AND (strlen($row['last_change'])>0)) {
                         print "\n\t<url>\n\t\t<lastmod>{$row['last_change']}</lastmod>\n\t\t<loc>https://vlv-ilmenau.de/#!" . $sgang . "|" . $s . "|" . $g . "</loc>\n\t\t<changefreq>daily</changefreq>\n\t\t<priority>0.2</priority>\n\t</url>";
                     }
                     else {
@@ -54,9 +54,9 @@ echo "<?xml version='1.0' encoding='UTF-8' ?>\n";
                 }
             } else {
                 // Last-Change herausfinden
-                $result = $db->query("SELECT MAX(`vlv_entry`.`last_change`) AS `last_change` FROM `vlv_entry` INNER JOIN `vlv_entry2stud` ON `vlv_entry`.`id` = `vlv_entry2stud`.`id` WHERE `vlv_entry2stud`.`studiengang` = '".$sgang."' AND `vlv_entry2stud`.`semester` = '".$g."' AND `vlv_entry`.`last_change` <= DATE_FORMAT(NOW(),'%Y-%m-%d') AND `vlv_entry`.`last_change` != '' AND `vlv_entry`.`last_change` IS NOT NULL;");
+                $result = $db->query("SELECT MAX(`vlv_entry`.`last_change`) AS `last_change` FROM `vlv_entry` INNER JOIN `vlv_entry2stud` ON `vlv_entry`.`id` = `vlv_entry2stud`.`id` WHERE `vlv_entry2stud`.`studiengang` = '".$sgang."' AND `vlv_entry2stud`.`semester` = '".$g."' AND `vlv_entry`.`last_change` <= DATE_FORMAT(NOW(),'%Y-%m-%d');");
                 $row = $result->fetch_assoc();
-                if($row = $result->fetch_assoc()) {
+                if(($row = $result->fetch_assoc()) AND (strlen($row['last_change'])>0)) {
                     print "\n\t<url>\n\t\t<lastmod>{$row['last_change']}</lastmod>\n\t\t<loc>https://vlv-ilmenau.de/#!" . $sgang . "|" . $s . "</loc>\n\t\t<changefreq>daily</changefreq>\n\t\t<priority>0.2</priority>\n\t</url>";
                 }
                 else {
