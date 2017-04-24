@@ -6,7 +6,7 @@
 set_time_limit(300);
 date_default_timezone_set('Europe/Berlin');
 $ids[] = array('id' => 330, 'test' => strtotime('01.10.2016'), 'year' => 2016, 'ss' => false);
-$ids[] = array('id' => 6, 'test' => strtotime('01.04.2016'), 'year' => 2016, 'ss' => true);
+$ids[] = array('id' => 6, 'test' => strtotime('01.04.2017'), 'year' => 2017, 'ss' => true);
 
 $test = strtotime('01.10.2011');
 $christmasdec = '20161224';
